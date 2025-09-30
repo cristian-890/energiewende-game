@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energiewende…Interesse?</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Name Input Screen -->
+    <div id="nameScreen" class="screen active">
+      <div class="name-container">
+        <h1 class="game-title">Energiewende…Interesse?</h1>
+        <div class="input-group">
+          <input type="text" id="playerName" placeholder="Dein Name" maxlength="20">
+          <button id="startGame" class="start-btn">Spiel starten</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+      <div class="game-header">
+        <div class="player-info">
+          <span id="playerDisplay" class="player-name"></span>
+          <div class="counters">
+            <span class="counter correct">✓ <span id="correctCount">0</span></span>
+            <span class="counter wrong">✗ <span id="wrongCount">0</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-area">
+        <!-- Fixed symbols -->
+        <div class="fixed-symbol left">✗</div>
+        <div class="fixed-symbol right">✓</div>
+
+        <!-- Card container -->
+        <div id="cardContainer" class="card-container">
+          <div id="gameCard" class="card">
+            <div class="card-content">
+              <span id="cardText"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feedback smiley -->
+        <div id="feedbackSmiley" class="feedback-smiley"></div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div id="leaderboard" class="leaderboard">
+        <h3>Leaderboard</h3>
+        <div id="leaderboardList"></div>
+      </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="endScreen" class="screen">
+      <div class="end-container">
+        <div id="endTitle" class="end-title">ENDE</div>
+        <div id="finalLeaderboard" class="final-leaderboard">
+          <h2>Endergebnis</h2>
+          <div id="finalLeaderboardList"></div>
+          <div id="winnerAnnouncement" class="winner-announcement"></div>
+        </div>
+      </div>
+      <canvas id="confetti"></canvas>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

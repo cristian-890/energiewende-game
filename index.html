@@ -69,7 +69,30 @@
       <canvas id="confetti"></canvas>
     </div>
   </div>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCoXiE2knEYtgL6hj6oAcmCt0--tRfjwic",
+    authDomain: "energiewende1-35497.firebaseapp.com",
+    databaseURL: "https://energiewende1-35497-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "energiewende1-35497",
+    storageBucket: "energiewende1-35497.firebasestorage.app",
+    messagingSenderId: "146960746743",
+    appId: "1:146960746743:web:c81d6755220b91476a6bf2",
+    measurementId: "G-KLD0N4LYC2"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
   <script src="script.js"></script>
 </body>
 </html>

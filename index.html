@@ -1,74 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Energiewende…Interesse?</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energiewende... Interesse?</title>
+<style>
+:root{--bg:#0b0f12;--card:#0f1720;--muted:#9aa4ad;}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;background:var(--bg);color:#fff;overflow:hidden;}
+.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:32px;position:relative;}
+h1{text-align:center;font-size:24px;margin:0 0 8px 0;}
+#teamDisplay{font-size:20px;margin:8px 0;}
+.deck{width:360px;height:560px;position:relative;z-index:1;}
+.card{position:absolute;inset:0;border-radius:16px;padding:28px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;user-select:none;box-shadow:0 10px 30px rgba(0,0,0,.6);background:linear-gradient(180deg,#111827,#0b1220);transform-origin:center;transition:transform .2s ease, opacity .2s ease;}
+.symbol{position:fixed;top:50%;transform:translateY(-50%);font-size:96px;font-weight:bold;pointer-events:none;z-index:0;opacity:0.25;text-shadow:0 0 12px;}
+.symbol.left{left:40px;color:#ff1744;}
+.symbol.right{right:40px;color:#00e676;}
+.feedback{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:64px;opacity:0;pointer-events:none;z-index:20;}
+.feedback.show{animation:popfade 1s ease forwards;}
+@keyframes popfade{0%{transform:translate(-50%,-50%) scale(0.5);opacity:0;}50%{transform:translate(-50%,-50%) scale(1.5);opacity:1;}100%{transform:translate(-50%,-50%) scale(2);opacity:0;}}
+.smile{color:#00e676;text-shadow:0 0 12px #00e676,0 0 24px #00e676;}
+.cry{color:#ff1744;text-shadow:0 0 12px #ff1744,0 0 24px #ff1744;}
+.counter{display:flex;gap:24px;font-size:18px;margin-top:12px;color:var(--muted);}
+.counter span{font-weight:600;font-size:20px;}
+.leaderboard{margin-top:24px;width:80%;max-width:500px;text-align:left;transition:all 0.8s ease;}
+.leaderboard h2{color:#fff;text-align:center;}
+.player.red{color:#ff1744;text-shadow:0 0 6px #ff1744,0 0 12px #ff1744;}
+.player.blue{color:#00e6ff;text-shadow:0 0 6px #00e6ff,0 0 12px #00e6ff;}
+</style>
 </head>
 <body>
-  <div id="app">
-    <!-- Name Input Screen -->
-    <div id="nameScreen" class="screen active">
-      <div class="name-container">
-        <h1 class="game-title">Energiewende…Interesse?</h1>
-        <div class="input-group">
-          <input type="text" id="playerName" placeholder="Dein Name" maxlength="20">
-          <button id="startGame" class="start-btn">Spiel starten</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Game Screen -->
-    <div id="gameScreen" class="screen">
-      <div class="game-header">
-        <div class="player-info">
-          <span id="playerDisplay" class="player-name"></span>
-          <div class="counters">
-            <span class="counter correct">✓ <span id="correctCount">0</span></span>
-            <span class="counter wrong">✗ <span id="wrongCount">0</span></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="game-area">
-        <!-- Fixed symbols -->
-        <div class="fixed-symbol left">✗</div>
-        <div class="fixed-symbol right">✓</div>
-
-        <!-- Card container -->
-        <div id="cardContainer" class="card-container">
-          <div id="gameCard" class="card">
-            <div class="card-content">
-              <span id="cardText"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Feedback smiley -->
-        <div id="feedbackSmiley" class="feedback-smiley"></div>
-      </div>
-
-      <!-- Leaderboard -->
-      <div id="leaderboard" class="leaderboard">
-        <h3>Leaderboard</h3>
-        <div id="leaderboardList"></div>
-      </div>
-    </div>
-
-    <!-- End Screen -->
-    <div id="endScreen" class="screen">
-      <div class="end-container">
-        <div id="endTitle" class="end-title">ENDE</div>
-        <div id="finalLeaderboard" class="final-leaderboard">
-          <h2>Endergebnis</h2>
-          <div id="finalLeaderboardList"></div>
-          <div id="winnerAnnouncement" class="winner-announcement"></div>
-        </div>
-      </div>
-      <canvas id="confetti"></canvas>
-    </div>
+<div class="wrap">
+  <h1>Interessiert sich der Kunde für die Energiewende?</h1>
+  <div id="nameForm">
+    <input type="text" id="playerName" placeholder="Dein Name" />
+    <button id="startBtn">Start</button>
   </div>
+  <div id="teamDisplay"></div>
+  <div class="counter">
+    <div>Richtig: <span id="rightCount">0</span></div>
+    <div>Falsch: <span id="wrongCount">0</span></div>
+  </div>
+  <div class="deck" id="deck"></div>
+  <div class="leaderboard" id="leaderboard"></div>
+</div>
+
+<div class="symbol left">✕</div>
+<div class="symbol right">✓</div>
+<div class="feedback" id="feedback"></div>
+
+<!-- Firebase SDK -->
 <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
@@ -93,6 +73,9 @@
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 </script>
-  <script src="script.js"></script>
+
+<!-- Dein Script -->
+<script src="script.js"></script>
+
 </body>
 </html>
